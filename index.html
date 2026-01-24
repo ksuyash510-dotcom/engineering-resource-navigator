@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Engineering Resource Navigator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+body { background: #020617; color: #e5e7eb; margin: 0; padding: 30px; }
+h1 { text-align: center; font-size: 2.4rem; }
+.subtitle { text-align: center; color: #94a3b8; margin-bottom: 40px; }
+.container { max-width: 1100px; margin: auto; }
+.section { margin-bottom: 40px; }
+.section h2 { color: #38bdf8; margin-bottom: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.card { background: #020617; border-radius: 14px; padding: 18px; cursor: pointer; border: 1px solid #020617; transition: 0.3s; }
+.card:hover { transform: translateY(-6px); border-color: #38bdf8; box-shadow: 0 10px 30px rgba(56,189,248,0.15); }
+.card-title { font-weight: 600; }
+.card-sub { font-size: 0.8rem; color: #9ca3af; margin-top: 6px; }
+.details { background: #020617; border-radius: 16px; padding: 25px; animation: fadeIn 0.4s ease; }
+.resource { display: block; padding: 12px; margin-top: 10px; background: #020617; border-radius: 10px; text-decoration: none; color: #38bdf8; border: 1px solid #020617; }
+.resource:hover { border-color: #38bdf8; padding-left: 16px; }
+@keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
+</style>
+</head>
+
+<body>
+
+<h1>Engineering Resource Navigator</h1>
+<p class="subtitle">Select branch → subject → access deep, underrated learning resources</p>
+
+<div class="container">
+    <div class="section">
+        <h2>1️⃣ Select Branch</h2>
+        <div class="grid" id="branchGrid"></div>
+    </div>
+
+    <div class="section">
+        <h2>2️⃣ Select Subject</h2>
+        <div class="grid" id="subjectGrid"></div>
+    </div>
+
+    <div class="section" id="details"></div>
+</div>
+
+<script>
+function infoBlock(desc, links={}) {
+    return { info: desc, links };
+}
+
+const data = {
+
+Mechanical: {
+    full: "Mechanical Engineering",
+    subjects: {
+        "Engineering Mechanics": infoBlock("Foundation of forces and motion in engineering systems.", {
+            "Engineer4Free": "https://www.engineer4free.com/",
+            "LearnEngineering.org": "https://learnengineering.org/",
+            "Grabcad Library": "https://grabcad.com/library"
+        }),
+        "Thermodynamics": infoBlock("Study of energy, heat, work and laws governing energy systems.", {
+            "LearnEngineering.org": "https://learnengineering.org/",
+            "HowStuffWorks – Thermodynamics": "https://science.howstuffworks.com/thermodynamics.htm",
+            "ThermoNotes": "https://www.thermonotes.com/"
+        }),
+        "Fluid Mechanics": infoBlock("Behavior of fluids at rest and in motion.", {
+            "CFD Online": "https://www.cfd-online.com/",
+            "LearnEngineering.org": "https://learnengineering.org/",
+            "Grabcad Library": "https://grabcad.com/library"
+        }),
+        "Strength of Materials": infoBlock("Stress, strain and deformation of materials.", {
+            "Engineer4Free": "https://www.engineer4free.com/",
+            "Grabcad Library": "https://grabcad.com/library",
+            "MatWeb Material Database": "https://www.matweb.com/"
+        }),
+        "Heat Transfer": infoBlock("Modes of heat transfer and thermal systems.", {
+            "LearnEngineering.org": "https://learnengineering.org/",
+            "Engineering Toolbox": "https://www.engineeringtoolbox.com/",
+            "Grabcad Library": "https://grabcad.com/library"
+        }),
+        "Machine Design": infoBlock("Design of mechanical components and systems.", {
+            "LearnEngineering.org": "https://learnengineering.org/",
+            "Grabcad Library": "https://grabcad.com/library",
+            "HowStuffWorks – Machines": "https://science.howstuffworks.com/machine.htm"
+        }),
+        "Manufacturing Processes": infoBlock("Production methods like casting, welding, machining.", {
+            "Engineer4Free": "https://www.engineer4free.com/",
+            "MIT OCW Manufacturing": "https://ocw.mit.edu/courses/mechanical-engineering/",
+            "Grabcad Library": "https://grabcad.com/library"
+        }),
+        "Theory of Machines": infoBlock("Kinematics and dynamics of machinery.", {
+            "LearnEngineering.org": "https://learnengineering.org/",
+            "Grabcad Library": "https://grabcad.com/library"
+        }),
+        "IC Engines": infoBlock("Working and analysis of internal combustion engines.", {
+            "LearnEngineering.org": "https://learnengineering.org/",
+            "HowStuffWorks – Engines": "https://science.howstuffworks.com/engine.htm"
+        }),
+        "Refrigeration & AC": infoBlock("Cooling systems and air conditioning principles.", {
+            "Engineer4Free": "https://www.engineer4free.com/",
+            "HVAC School": "https://www.hvacrschool.com/"
+        })
+    }
+},
+
+Electronics: {
+    full: "Electronics & Communication Engineering",
+    subjects: {
+        "Network Theory": infoBlock("Electrical network analysis techniques.", {
+            "All About Circuits": "https://www.allaboutcircuits.com/",
+            "Electronics Tutorials": "https://www.electronics-tutorials.ws/"
+        }),
+        "Analog Electronics": infoBlock("Amplifiers, diodes, transistors.", {
+            "All About Circuits": "https://www.allaboutcircuits.com/",
+            "Electronics Tutorials": "https://www.electronics-tutorials.ws/"
+        }),
+        "Digital Electronics": infoBlock("Logic gates, flip-flops, counters.", {
+            "CircuitVerse": "https://circuitverse.org/",
+            "EveryCircuit": "https://everycircuit.com/"
+        }),
+        "Signals & Systems": infoBlock("Signal representation and analysis.", {
+            "All About Circuits": "https://www.allaboutcircuits.com/",
+            "Electronics Tutorials": "https://www.electronics-tutorials.ws/"
+        }),
+        "Communication Systems": infoBlock("Analog and digital communication.", {
+            "All About Circuits": "https://www.allaboutcircuits.com/",
+            "Electronics Tutorials": "https://www.electronics-tutorials.ws/"
+        }),
+        "Control Systems": infoBlock("System modeling and stability.", {
+            "All About Circuits": "https://www.allaboutcircuits.com/",
+            "CircuitVerse": "https://circuitverse.org/"
+        }),
+        "Microprocessors": infoBlock("Architecture and interfacing.", {
+            "All About Circuits": "https://www.allaboutcircuits.com/"
+        }),
+        "VLSI": infoBlock("Integrated circuit design.", {
+            "VLSI Academy": "https://vlsiacademy.com/"
+        }),
+        "EM Waves": infoBlock("Propagation of electromagnetic waves.", {
+            "All About Circuits": "https://www.allaboutcircuits.com/"
+        }),
+        "DSP": infoBlock("Digital signal processing techniques.", {
+            "All About Circuits": "https://www.allaboutcircuits.com/"
+        })
+    }
+},
+
+Electrical: {
+    full: "Electrical Engineering",
+    subjects: {
+        "Basic Electrical": infoBlock("Fundamentals of electrical circuits.", {
+            "Electrical4U": "https://www.electrical4u.com/",
+            "LearnElectronicsOnline": "https://www.learnelectronicsonline.com/"
+        }),
+        "Electrical Machines": infoBlock("Transformers, motors, generators.", {
+            "Electrical4U": "https://www.electrical4u.com/",
+            "CircuitLab": "https://www.circuitlab.com/"
+        }),
+        "Power Systems": infoBlock("Generation and transmission of power.", {
+            "Electrical4U": "https://www.electrical4u.com/",
+            "LearnElectronicsOnline": "https://www.learnelectronicsonline.com/"
+        }),
+        "Power Electronics": infoBlock("Converters, inverters.", {
+            "Electrical4U": "https://www.electrical4u.com/",
+            "CircuitLab": "https://www.circuitlab.com/"
+        }),
+        "Control Systems": infoBlock("Feedback and stability.", {
+            "Electrical4U": "https://www.electrical4u.com/"
+        }),
+        "Measurements": infoBlock("Electrical measurement instruments.", {
+            "Electrical4U": "https://www.electrical4u.com/"
+        }),
+        "Switchgear": infoBlock("Protection devices.", {
+            "Electrical4U": "https://www.electrical4u.com/"
+        }),
+        "Renewable Energy": infoBlock("Solar, wind energy systems.", {
+            "Electrical4U": "https://www.electrical4u.com/"
+        }),
+        "HVDC": infoBlock("High voltage DC transmission.", {
+            "Electrical4U": "https://www.electrical4u.com/"
+        }),
+        "Smart Grids": infoBlock("Modern power distribution.", {
+            "Electrical4U": "https://www.electrical4u.com/"
+        })
+    }
+},
+
+Civil: {
+    full: "Civil Engineering",
+    subjects: {
+        "Engineering Mechanics": infoBlock("Statics and dynamics.", {
+            "Engineering Toolbox": "https://www.engineeringtoolbox.com/",
+            "Civil Engineering Forum": "https://www.civilengineeringforum.me/"
+        }),
+        "Strength of Materials": infoBlock("Stress and strain.", {
+            "Engineering Toolbox": "https://www.engineeringtoolbox.com/"
+        }),
+        "Structural Analysis": infoBlock("Analysis of structures.", {
+            "StructX": "https://structx.com/"
+        }),
+        "Concrete Technology": infoBlock("Properties of concrete.", {
+            "Civil Engineering Forum": "https://www.civilengineeringforum.me/"
+        }),
+        "Geotechnical": infoBlock("Soil mechanics and foundations.", {
+            "Civil Engineering Forum": "https://www.civilengineeringforum.me/"
+        }),
+        "Hydrology": infoBlock("Water resources engineering.", {
+            "Civil Engineering Forum": "https://www.civilengineeringforum.me/"
+        }),
+        "Transportation": infoBlock("Road and traffic engineering.", {
+            "Engineering Toolbox": "https://www.engineeringtoolbox.com/"
+        }),
+        "Environmental": infoBlock("Waste and water treatment.", {
+            "Engineering Toolbox": "https://www.engineeringtoolbox.com/"
+        }),
+        "Surveying": infoBlock("Land measurement techniques.", {
+            "Civil Engineering Forum": "https://www.civilengineeringforum.me/"
+        }),
+        "Construction Planning": infoBlock("Project management.", {
+            "Engineering Toolbox": "https://www.engineeringtoolbox.com/"
+        })
+    }
+},
+
+Computer: {
+    full: "Computer Engineering",
+    subjects: {
+        "Programming": infoBlock("Basics of coding.", {
+            "LearnPython.org": "https://www.learnpython.org/",
+            "Project Euler": "https://projecteuler.net/",
+            "Visualgo": "https://visualgo.net/en"
+        }),
+        "Data Structures": infoBlock("Organizing data efficiently.", {
+            "Visualgo": "https://visualgo.net/en",
+            "GeeksforGeeks": "https://www.geeksforgeeks.org"
+        }),
+        "Algorithms": infoBlock("Problem-solving techniques.", {
+            "GeeksforGeeks": "https://www.geeksforgeeks.org",
+            "Project Euler": "https://projecteuler.net/"
+        }),
+        "Operating Systems": infoBlock("Process and memory management.", {
+            "OSTEP": "https://pages.cs.wisc.edu/~remzi/OSTEP/"
+        }),
+        "DBMS": infoBlock("Database management systems.", {
+            "DB Fiddle": "https://www.db-fiddle.com/",
+            "Mode Analytics SQL Tutorial": "https://mode.com/sql-tutorial/"
+        }),
+        "Computer Networks": infoBlock("Networking concepts.", {
+            "Cisco Packet Tracer": "https://www.netacad.com/courses/packet-tracer",
+            "GNS3": "https://www.gns3.com/"
+        }),
+        "Software Engineering": infoBlock("Software development lifecycle.", {
+            "Agile Alliance": "https://www.agilealliance.org/",
+            "Scrum.org Resources": "https://www.scrum.org/resources"
+        }),
+        "Web Development": infoBlock("Frontend and backend.", {
+            "MDN Web Docs": "https://developer.mozilla.org/",
+            "FreeCodeCamp": "https://www.freecodecamp.org/"
+        }),
+        "AI Basics": infoBlock("Artificial intelligence concepts.", {
+            "Fast.ai": "https://www.fast.ai/",
+            "Google AI Education": "https://ai.google/education/"
+        }),
+        "Cyber Security": infoBlock("Security fundamentals.", {
+            "OWASP": "https://owasp.org/",
+            "Hack The Box": "https://www.hackthebox.eu/"
+        })
+    }
+}
+
+};
+
+const branchGrid = document.getElementById("branchGrid");
+const subjectGrid = document.getElementById("subjectGrid");
+const details = document.getElementById("details");
+
+Object.keys(data).forEach(branch => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `<div class="card-title">${branch}</div>
+                     <div class="card-sub">${data[branch].full}</div>`;
+    div.onclick = () => loadSubjects(branch);
+    branchGrid.appendChild(div);
+});
+
+function loadSubjects(branch) {
+    subjectGrid.innerHTML = "";
+    details.innerHTML = "";
+    Object.keys(data[branch].subjects).forEach(subject => {
+        const div = document.createElement("div");
+        div.className = "card";
+        div.innerHTML = `<div class="card-title">${subject}</div>`;
+        div.onclick = () => loadDetails(branch, subject);
+        subjectGrid.appendChild(div);
+    });
+}
+
+function loadDetails(branch, subject) {
+    const s = data[branch].subjects[subject];
+    details.innerHTML = `
+        <div class="details">
+            <h2>${subject}</h2>
+            <p>${s.info}</p>
+            <h3>📚 Useful Resources</h3>
+            ${Object.entries(s.links).map(([name, link]) => `<a class="resource" href="${link}" target="_blank">🔗 ${name}</a>`).join("")}
+        </div>
+    `;
+}
+</script>
+
+</body>
+</html>
+
